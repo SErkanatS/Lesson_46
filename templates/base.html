@@ -60,9 +60,10 @@
         }
 
         .header_toggle {
-            color: var(--first-color);
+            color: white;
             font-size: 1.5rem;
-            cursor: pointer
+            cursor: pointer;
+            z-index: 1500;
         }
 
         .header_img {
@@ -87,7 +88,7 @@
             background-color: var(--first-color);
             padding: .5rem 1rem 0 0;
             transition: .5s;
-            z-index: var(--z-fixed)
+            z-index: 100;
         }
 
         .nav {
@@ -199,14 +200,16 @@
 
 <body>
     <header class="header" id="header">
-        <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
-        <div class="header_img"> <img src="https://i.imgur.com/hczKIze.jpg" alt=""> </div>
+        
+        {% if request.user.is_authenticated %}
+            <div class="header_img"><img src="{{ request.user.image.url }}" alt=""></div>
+        {% endif %}
     </header>
     <div class="l-navbar" id="nav-bar">
         <nav class="nav">
             <div>
                 <a href="#" class="nav_logo">
-                    <i class='bx bx-layer nav_logo-icon'></i>
+                    <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
                     <span class="nav_logo-name">BBBootstrap</span>
                 </a>
                 <div class="nav_list">
@@ -237,13 +240,13 @@
                 </div>
             </div>
             {% if request.user.is_authenticated %}
-            <a href="#" class="nav_link">
+            <a href="{% url 'logout' %}" class="nav_link">
                 <i class='bx bx-log-out nav_icon'></i>
                 <span class="nav_name">SignOut</span>
             </a>
             {% else %}
             <div>
-                <a href="#" class="nav_link">
+                <a href="{% url 'login' %}" class="nav_link">
                     <i class='bx bx-log-in nav_icon' ></i>
                     <span class="nav_name">Sign In</span>
                 </a>
@@ -251,7 +254,7 @@
             {% endif %}
         </nav>
     </div>
-    <div class="height-100 bg-light">
+    <div class="height-100 d-flex flex-column align-items-center justify-content-center">
         {% block content %}
         {% endblock %}
     </div>
